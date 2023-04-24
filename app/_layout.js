@@ -2,7 +2,11 @@ import { Stack } from "expo-router";
 import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-
+import { Provider } from "../context/auth";
+import OnBoardingScreen from "./OnBoardingScreen";
+// import { NavigationContainer } from '@react-navigation/native';
+// import SignIn from "./(auth)/sign-in";
+// import Home from ".";
 SplashScreen.preventAutoHideAsync();
 
 const Layout = () => {
@@ -20,6 +24,12 @@ const Layout = () => {
 
     if (!fontsLoaded) return null;
 
-    return <Stack />;
+    return (
+
+        <Provider>
+
+            <Stack />
+        </Provider>
+    );
 }
 export default Layout;

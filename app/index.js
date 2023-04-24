@@ -6,12 +6,24 @@ import { COLORS, icons, images, SIZES } from "../constants";
 import {
   Nearbyjobs, Popularjobs, ScreenHeaderBtn, Welcome
 } from "../components"
+import { auth } from "../config/firebase"
+import { signOut } from "firebase/auth";
 
 const Home = () => {
 
+  // async function handleSignOut() {
+  //   try {
+  //     await signOut(auth);
+  //     router.replace('/sign-in');
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw error;
+  //   }
+  // }
+
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("")
-
+  // const { signOut } = useAuth();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen
@@ -48,6 +60,8 @@ const Home = () => {
           <Nearbyjobs />
         </View>
       </ScrollView>
+      {/* //check later */}
+      {/* <Text onPress={handleSignOut()}>Sign Out</Text> */}
     </SafeAreaView>
   )
 }
