@@ -13,7 +13,7 @@ const useFetch = (endpoint, query) => {
         method: 'GET',
         url: `https://jsearch.p.rapidapi.com/${endpoint}`,
         headers: {
-            'X-RapidAPI-Key': 'd1058ba0abmsh087a2c0cf36fb4cp185696jsn7cd3ad660ef2',
+            'X-RapidAPI-Key': 'ca04871639msha5e83cace868027p1c4a51jsn14182dee1853',
             'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
         },
         params: { ...query },
@@ -30,13 +30,20 @@ const useFetch = (endpoint, query) => {
             setIsLoading(false);
         } catch (error) {
             setError(error);
+            console.log(error);
             alert('There is an error')
         } finally {
             setIsLoading(false);
         }
     }
     useEffect(() => {
-        fetchData();
+        const delay = 1000;
+        const timer = setTimeout(() => {
+            fetchData();
+        }, delay);
+
+        return () => clearTimeout(timer);
+
     }, []);
 
     const refetch = () => {

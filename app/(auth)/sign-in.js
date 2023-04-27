@@ -5,7 +5,7 @@ import { COLORS, icons, images, SIZES } from "../../constants";
 import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Ionicons } from '@expo/vector-icons'
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 
 

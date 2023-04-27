@@ -27,8 +27,7 @@ const Layout = () => {
     return (
 
         <Provider>
-
-            <Stack />
+            <Stack screenOptions={{ headerShown: false }} />
         </Provider>
     );
 }

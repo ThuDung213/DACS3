@@ -4,9 +4,9 @@ import { Stack, useRouter, useSearchParams } from 'expo-router'
 import { Text, SafeAreaView } from 'react-native'
 import axios from 'axios'
 
-import { ScreenHeaderBtn, NearbyJobCard } from '../../components'
-import { COLORS, icons, SIZES } from '../../constants'
-import styles from '../../styles/search'
+import { ScreenHeaderBtn, NearbyJobCard } from '../../../components'
+import { COLORS, icons, SIZES } from '../../../constants'
+import styles from '../../../styles/search'
 
 const JobSearch = () => {
     const params = useSearchParams();
@@ -26,7 +26,7 @@ const JobSearch = () => {
                 method: "GET",
                 url: `https://jsearch.p.rapidapi.com/search`,
                 headers: {
-                    "X-RapidAPI-Key": '3956643585msha821792f7fef11cp119e5ejsn832901f946a8',
+                    "X-RapidAPI-Key": 'ca04871639msha5e83cace868027p1c4a51jsn14182dee1853',
                     "X-RapidAPI-Host": "jsearch.p.rapidapi.com",
                 },
                 params: {

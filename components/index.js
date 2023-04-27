@@ -15,14 +15,7 @@ import Specifics from "./jobdetails/specifics/Specifics";
 // common
 import NearbyJobCard from "./common/cards/nearby/NearbyJobCard";
 
-//login 
-import Logo from "./signin/Logo";
-import LoginInput from "./signin/LoginInput";
-import SigninButton from "./signin/SigninButton";
 
-//signup
-import SignupInput from "./signup/SignupInput";
-import SignupButton from "./signup/SignupButton"
 
 export {
   // Screen header components
@@ -39,11 +32,5 @@ export {
   JobFooter,
   Specifics,
   NearbyJobCard,
-  // Login screen components
-  Logo,
-  LoginInput,
-  SigninButton,
-  // SignUp screen
-  SignupInput,
-  SignupButton
+
 };

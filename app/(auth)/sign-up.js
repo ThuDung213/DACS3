@@ -1,11 +1,8 @@
 import { Text, TextInput, View, StyleSheet, SafeAreaView, KeyboardAvoidingView, TouchableOpacity, Image, Platform } from "react-native";
-import { useAuth } from "../../context/auth";
-import { Logo } from "../../components";
 import { COLORS } from "../../constants";
 import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Ionicons } from '@expo/vector-icons'
-import { ScrollView } from "react-native-web";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 

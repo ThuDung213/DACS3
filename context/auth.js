@@ -26,7 +26,7 @@ function useProtectedRoute() {
             // Redirect away from the sign-in page.
             router.replace("/sign-in");
         } else if (user && inAuthGroup) {
-            router.replace("/")
+            router.replace("/menu/home")
         }
     }, [user, segments]);
 }
@@ -62,7 +62,7 @@ export function Provider(props) {
         try {
             await signOut(auth);
             setAuth(null);
-            router.replace('/sign-in');
+            // router.replace('/sign-in');
         } catch (error) {
             console.error(error);
             throw error;
