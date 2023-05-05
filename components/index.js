@@ -14,12 +14,13 @@ import Specifics from "./jobdetails/specifics/Specifics";
 
 // common
 import NearbyJobCard from "./common/cards/nearby/NearbyJobCard";
-
+import FormButton from "./common/FormButton";
 
 
 export {
   // Screen header components
   ScreenHeaderBtn,
+  FormButton,
   // Home screen components
   Welcome,
   Nearbyjobs,

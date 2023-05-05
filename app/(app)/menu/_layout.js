@@ -21,7 +21,7 @@ export default () => {
                 tabBarIcon: ({ color }) => (
                     <FontAwesome name="user-circle-o" size={24} color={color} />
                 ),
-                title: "Profile"
+                headerShown: false,
             }}
             />
         </Tabs>
