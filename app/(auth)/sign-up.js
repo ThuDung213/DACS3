@@ -36,7 +36,7 @@ export default function SignUp({ onPress }) {
                         email: user.email,
                         username: username,
                         address: '',
-                        image: '',
+                        image: null,
                         phone: '',
                         bio: '',
                     });

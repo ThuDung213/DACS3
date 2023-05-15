@@ -4,8 +4,8 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const FormButton = ({ buttonTitle, ...rest }) => {
     return (
-        <TouchableOpacity style={styles.buttonContainer} {...rest}>
-            <Text style={styles.buttonText}>{buttonTitle}</Text>
+        <TouchableOpacity style={styles.commandButton} {...rest}>
+            <Text style={styles.panelButtonTitle}>{buttonTitle}</Text>
         </TouchableOpacity>
     );
 };
@@ -13,20 +13,16 @@ const FormButton = ({ buttonTitle, ...rest }) => {
 export default FormButton;
 
 const styles = StyleSheet.create({
-    buttonContainer: {
-        marginTop: 10,
-        width: '100%',
-        height: 10,
-        backgroundColor: '#2e64e5',
-        padding: 10,
+    commandButton: {
+        padding: 15,
+        borderRadius: 10,
+        backgroundColor: '#FF6347',
         alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 3,
+        marginTop: 10,
     },
-    buttonText: {
-        fontSize: 18,
+    panelButtonTitle: {
+        fontSize: 17,
         fontWeight: 'bold',
-        color: '#ffffff',
-        fontFamily: 'Lato-Regular',
+        color: 'white',
     },
 });

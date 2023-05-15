@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, ImageBackground, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, ImageBackground, Platform, Alert } from 'react-native'
 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useTheme } from 'react-native-paper';
 import { Stack } from 'expo-router';
+import { Storage } from 'expo-storage';
 
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import * as ImagePicker from 'expo-image-picker';
-
-import { auth, database } from '../../../../config/firebase';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import FormButton from '../../../../components/common/FormButton'
+import { v4 } from 'uuid';
+import { auth, database, storage } from '../../../../config/firebase';
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { ref, uploadBytes } from 'firebase/storage';
+import BottomSheetBehavior from 'reanimated-bottom-sheet';
 function EditProfile() {
     const user = auth.currentUser;
     const { colors } = useTheme();
@@ -19,6 +23,8 @@ function EditProfile() {
     const fall = new Animated.Value(1);
     const [image, setImage] = useState('https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80');
     const [userData, setUserData] = useState(null);
+    const [uploading, setUploading] = useState(false);
+    const [docId, setDocId] = useState(null);
 
 
     useEffect(() => {
@@ -43,6 +49,13 @@ function EditProfile() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
+            uploadImage(result.assets[0].uri)
+                .then(() => {
+                    Alert.alert("Success");
+                })
+                .catch((error) => {
+                    Alert.alert(error);
+                })
             bs.current.snapTo(1);
         }
     };
@@ -58,9 +71,31 @@ function EditProfile() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
+            uploadImage(result.assets[0].uri)
+                .then(() => {
+                    Alert.alert("Success");
+                })
+                .catch((error) => {
+                    Alert.alert(error);
+                })
             bs.current.snapTo(1);
         }
     };
+
+    const uploadImage = async (uri) => {
+        try {
+            const imageRef = ref(storage, `images/{${v4()}}.jpeg`);
+            const response = await fetch(uri);
+            const bytes = await response.blob();
+            const snapshot = await uploadBytes(imageRef, bytes);
+            console.log('Image uploaded successfully:', snapshot.metadata.fullPath);
+            // const downloadURL = await snapshot.ref.getDownloadURL();
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    };
+
 
     const renderInner = () => (
         <View style={styles.panel}>
@@ -89,30 +124,46 @@ function EditProfile() {
     );
 
     const getUser = async () => {
-        try {
-            // const userDoc = await collection(database, 'users').doc(user.uid).get();
-            // console.log('User Data', userDoc.data());
-            const userDocRef = doc(collection(database, 'users'), user.uid);
-            const userDoc = await getDoc(userDocRef);
-            console.log('User Document:', userDoc);
-            if (userDoc.exists) {
-                console.log("User Data", userDoc.data())
-                setUserData(userDoc.data());
-            } else {
-                console.log('User document not found!');
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        }
+        const q = query(collection(database, 'users'), where('_id', "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+            setDocId(doc.id);
+            setUserData(doc.data());
+        });
     };
 
     useEffect(() => {
         getUser();
     }, []);
 
-    const handleUpdate = () => {
+    const handleUpdate = async () => {
+        // let imgUrl = await uploadImage();
 
+        // if (imgUrl == null && userData.image != "") {
+        //     return imgUrl = userData.image;
+        // }
+        const data = {
+            username: userData.username,
+            email: userData.email,
+            phone: userData.phone,
+            bio: userData.bio,
+            address: userData.address,
+            // image: imgUrl,
+        }
+
+        const userRef = doc(database, 'users', docId);
+        await updateDoc(userRef, data)
+            .then(() => {
+                console.log("User Updated");
+                Alert.alert(
+                    'Profile Updated',
+                    'Your profile has been updated',
+                );
+            })
     }
+
 
     return (
         <View style={styles.container}>
@@ -163,8 +214,10 @@ function EditProfile() {
                             </ImageBackground>}
                         </View>
                     </TouchableOpacity>
-                    <Text style={{ marginTop: 10, fontSize: 10, fontWeight: 'bold' }}>Jun Jun</Text>
-                    <Text> {user.uid}</Text>
+                    <Text style={{ marginTop: 10, fontSize: 10, fontWeight: 'bold' }}>
+                        {userData ? userData.username : ''}
+                    </Text>
+                    {/* <Text> {user.uid}</Text> */}
                 </View>
 
                 <View style={styles.action}>
@@ -176,6 +229,8 @@ function EditProfile() {
                         style={[styles.textInput, {
                             color: colors.text
                         }]}
+                        value={userData ? userData.username : ''}
+                        onChangeText={(text) => setUserData({ ...userData, username: text })}
                     />
                 </View>
                 <View style={styles.action}>
@@ -188,6 +243,8 @@ function EditProfile() {
                         style={[styles.textInput, {
                             color: colors.text
                         }]}
+                        value={userData ? userData.email : ''}
+                        onChangeText={(text) => setUserData({ ...userData, email: text })}
                     />
                 </View>
                 <View style={styles.action}>
@@ -200,6 +257,8 @@ function EditProfile() {
                         style={[styles.textInput, {
                             color: colors.text
                         }]}
+                        value={userData ? userData.phone : ''}
+                        onChangeText={(text) => setUserData({ ...userData, phone: text })}
                     />
                 </View>
                 <View style={styles.action}>
@@ -211,6 +270,8 @@ function EditProfile() {
                         style={[styles.textInput, {
                             color: colors.text
                         }]}
+                        value={userData ? userData.address : ''}
+                        onChangeText={(text) => setUserData({ ...userData, address: text })}
                     />
                 </View>
                 <View style={styles.action}>
@@ -222,11 +283,11 @@ function EditProfile() {
                         style={[styles.textInput, {
                             color: colors.text
                         }]}
+                        value={userData ? userData.bio : ''}
+                        onChangeText={(text) => setUserData({ ...userData, bio: text })}
                     />
                 </View>
-                <TouchableOpacity style={styles.commandButton} onPress={handleUpdate}>
-                    <Text style={styles.panelButtonTitle}>Update</Text>
-                </TouchableOpacity>
+                <FormButton buttonTitle="Update" onPress={handleUpdate} />
             </Animated.View>
         </View>
     )
@@ -251,12 +312,6 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#FFFFFF',
         paddingTop: 20,
-        // borderTopLeftRadius: 20,
-        // borderTopRightRadius: 20,
-        // shadowColor: '#000000',
-        // shadowOffset: {width: 0, height: 0},
-        // shadowRadius: 5,
-        // shadowOpacity: 0.4,
     },
     header: {
         backgroundColor: '#FFFFFF',
@@ -264,7 +319,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -1, height: -3 },
         shadowRadius: 2,
         shadowOpacity: 0.4,
-        // elevation: 5,
         paddingTop: 20,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
