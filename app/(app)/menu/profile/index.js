@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { auth } from '../../../../config/firebase'
 import { useRouter } from 'expo-router';
 import { useNavigation } from "@react-navigation/native";
@@ -10,25 +10,34 @@ import {
     Text,
     TouchableRipple,
 } from 'react-native-paper';
+import { User } from "./User"
 
 import { FontAwesome5 } from '@expo/vector-icons';
+import { set } from 'react-native-reanimated';
 
-const Profile = ({ image }) => {
-    const navigation = useNavigation();
-    const { user } = auth.currentUser;
+const Profile = () => {
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        const currentUser = new User();
+        currentUser.getUser().then(() => {
+            setUser(currentUser);
+            // console.log("image", user?.image)
+        })
+    }, []);
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <Avatar.Image
                         source={{
-                            uri: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80'
+                            uri: user?.image
                         }}
                         size={80}
                     />
                     <View style={{ marginLeft: 20 }}>
-                        <Title style={styles.title}>JunJun</Title>
-                        <Caption style={styles.caption}>@junjun</Caption>
+                        <Title style={styles.title}>{user?.username}</Title>
+                        <Caption style={styles.caption}>@{user?.username}</Caption>
                     </View>
                 </View>
             </View>
@@ -36,15 +45,15 @@ const Profile = ({ image }) => {
             <View style={styles.userInfoSection}>
                 <View style={styles.row}>
                     <FontAwesome5 name="map-marker-alt" color="#777777" size={20} />
-                    <Text style={{ color: "#777777", marginLeft: 20 }}>Danang, Vietnam</Text>
+                    <Text style={{ color: "#777777", marginLeft: 20 }}>{user?.address}</Text>
                 </View>
                 <View style={styles.row}>
                     <FontAwesome5 name="phone" color="#777777" size={20} />
-                    <Text style={{ color: "#777777", marginLeft: 20 }}>012345678</Text>
+                    <Text style={{ color: "#777777", marginLeft: 20 }}>{user?.phone}</Text>
                 </View>
                 <View style={styles.row}>
                     <FontAwesome5 name="envelope" color="#777777" size={20} />
-                    <Text style={{ color: "#777777", marginLeft: 20 }}>junjun@gmail.com</Text>
+                    <Text style={{ color: "#777777", marginLeft: 20 }}>{user?.email}</Text>
                 </View>
             </View>
 
