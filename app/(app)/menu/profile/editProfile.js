@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ImageBackground, Platform, Alert } from 'react-native'
-
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useTheme } from 'react-native-paper';
-import { Stack } from 'expo-router';
 import { Storage } from 'expo-storage';
-
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import * as ImagePicker from 'expo-image-picker';
@@ -14,16 +11,14 @@ import FormButton from '../../../../components/common/FormButton'
 import { v4 } from 'uuid';
 import { auth, database, storage } from '../../../../config/firebase';
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { ref, uploadBytes } from 'firebase/storage';
-import BottomSheetBehavior from 'reanimated-bottom-sheet';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 function EditProfile() {
     const user = auth.currentUser;
     const { colors } = useTheme();
     const bs = React.createRef();
     const fall = new Animated.Value(1);
-    const [image, setImage] = useState('https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80');
+    const [image, setImage] = useState(null);
     const [userData, setUserData] = useState(null);
-    const [uploading, setUploading] = useState(false);
     const [docId, setDocId] = useState(null);
 
 
@@ -49,13 +44,7 @@ function EditProfile() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            uploadImage(result.assets[0].uri)
-                .then(() => {
-                    Alert.alert("Success");
-                })
-                .catch((error) => {
-                    Alert.alert(error);
-                })
+            Alert.alert("Success");
             bs.current.snapTo(1);
         }
     };
@@ -71,13 +60,7 @@ function EditProfile() {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            uploadImage(result.assets[0].uri)
-                .then(() => {
-                    Alert.alert("Success");
-                })
-                .catch((error) => {
-                    Alert.alert(error);
-                })
+            Alert.alert("Success");
             bs.current.snapTo(1);
         }
     };
@@ -89,7 +72,8 @@ function EditProfile() {
             const bytes = await response.blob();
             const snapshot = await uploadBytes(imageRef, bytes);
             console.log('Image uploaded successfully:', snapshot.metadata.fullPath);
-            // const downloadURL = await snapshot.ref.getDownloadURL();
+            const downloadURL = await getDownloadURL(imageRef);
+            return downloadURL;
         } catch (error) {
             console.error('Error uploading image:', error);
             throw error;
@@ -139,18 +123,18 @@ function EditProfile() {
     }, []);
 
     const handleUpdate = async () => {
-        // let imgUrl = await uploadImage();
+        let imgUrl = await uploadImage(image);
 
-        // if (imgUrl == null && userData.image != "") {
-        //     return imgUrl = userData.image;
-        // }
+        if (imgUrl == null && userData.image != null) {
+            return imgUrl = userData.image;
+        }
         const data = {
             username: userData.username,
             email: userData.email,
             phone: userData.phone,
             bio: userData.bio,
             address: userData.address,
-            // image: imgUrl,
+            image: imgUrl,
         }
 
         const userRef = doc(database, 'users', docId);
@@ -190,9 +174,13 @@ function EditProfile() {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            {image && <ImageBackground
+                            <ImageBackground
                                 source={{
-                                    uri: image,
+                                    uri: image
+                                        ? image : userData
+                                            ? userData.image ||
+                                            'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80'
+                                            : 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80'
                                 }}
                                 style={{ height: 100, width: 100 }}
                                 imageStyle={{ borderRadius: 15 }}
@@ -211,13 +199,12 @@ function EditProfile() {
                                         borderRadius: 10,
                                     }} />
                                 </View>
-                            </ImageBackground>}
+                            </ImageBackground>
                         </View>
                     </TouchableOpacity>
                     <Text style={{ marginTop: 10, fontSize: 10, fontWeight: 'bold' }}>
                         {userData ? userData.username : ''}
                     </Text>
-                    {/* <Text> {user.uid}</Text> */}
                 </View>
 
                 <View style={styles.action}>
