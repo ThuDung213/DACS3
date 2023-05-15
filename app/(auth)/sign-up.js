@@ -4,33 +4,49 @@ import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Ionicons } from '@expo/vector-icons'
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebase";
+import { auth, database } from "../../config/firebase";
+import { addDoc, collection } from "firebase/firestore";
+
 
 
 
 export default function SignUp({ onPress }) {
     const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [comfirmpassword, setConfirmPassword] = useState('')
     const [validateMessage, setValidationMessage] = useState('')
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
 
-    let validateAndSet = (value, valueToCompare, setValue) => {
-        value !== valueToCompare ? setValidationMessage('Password does not match')
-            : setValidationMessage('')
-        setValue(value)
-    }
+    // let validateAndSet = (value, valueToCompare, setValue) => {
+    //     value !== valueToCompare ? setValidationMessage('Password does not match')
+    //         : setValidationMessage('')
+    //     setValue(value)
+    // }
 
     const handleSignup = async () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log('Account created!')
-                const user = userCredential.user;
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    const uid = user.uid;
+                    addDoc(collection(database, 'users'), {
+                        _id: uid,
+                        email: user.email,
+                        username: username,
+                        address: '',
+                        image: null,
+                        phone: '',
+                        bio: '',
+                    });
+                });
+
+            console.log('Account created!');
+        } catch (error) {
+            setErrorMessage(error.message);
+            console.log(error);
+        }
     };
 
     return (
@@ -62,18 +78,19 @@ export default function SignUp({ onPress }) {
                         <Ionicons name="key" size={25} style={styles.icon} />
                         <TextInput
                             style={styles.input}
-                            placeholder="Password" secureTextEntry
-                            value={password}
-                            onChangeText={(value) => validateAndSet(value, comfirmpassword, setPassword)} />
+                            placeholder="Username"
+                            value={username}
+                            onChangeText={(username) => { setUsername(username) }} />
                     </View>
                     <View style={styles.inputContainer}>
                         <Ionicons name="key" size={25} style={styles.icon} />
                         <TextInput
                             style={styles.input}
-                            placeholder="Confirm Password" secureTextEntry
-                            value={comfirmpassword}
-                            onChangeText={(value) => validateAndSet(value, password, setConfirmPassword)} />
+                            placeholder="Password" secureTextEntry
+                            value={password}
+                            onChangeText={(value) => { setPassword(value) }} />
                     </View>
+
                 </View>
 
 
