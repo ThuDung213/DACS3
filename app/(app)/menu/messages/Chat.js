@@ -5,7 +5,7 @@ import React, {
     useCallback
   } from 'react';
   import { TouchableOpacity, Text } from 'react-native';
-  import { GiftedChat } from 'react-native-gifted-chat';
+  import { GiftedChat,InputToolbar, Send } from 'react-native-gifted-chat';
   import {
     collection,
     addDoc,
@@ -13,17 +13,20 @@ import React, {
     query,
     onSnapshot
   } from 'firebase/firestore';
+  import { FontAwesome } from '@expo/vector-icons'; 
   import { signOut } from 'firebase/auth';
-import {auth,database} from '../../../../config/firebase'
-  import { useNavigation } from '@react-navigation/native';
+  import {auth,database} from '../../../../config/firebase'
+  import { useNavigation, useRoute } from '@react-navigation/native';
   import { AntDesign } from '@expo/vector-icons';
   import { COLORS } from '../../../../constants/constants/theme';
+import { View } from 'react-native-web';
 
 
   export default function Chat() {
 
     const [messages, setMessages] = useState([]);
     const navigation = useNavigation();
+    const route = useRoute();
 
   const onSignOut = () => {
       signOut(auth).catch(error => console.log('Error logging out: ', error));
@@ -40,13 +43,16 @@ import {auth,database} from '../../../../config/firebase'
             >
               <AntDesign name="logout" size={24} color={COLORS.gray} style={{marginRight: 10}}/>
             </TouchableOpacity>
+          ),
+          headerTitle: () => (
+            <Text>{route.params.name}</Text>
           )
         });
       }, [navigation]);
 
     useLayoutEffect(() => {
 
-        const collectionRef = collection(database, 'chats');
+        const collectionRef = collection(database, `group${route.params.name}`);
         const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -68,20 +74,42 @@ import {auth,database} from '../../../../config/firebase'
           GiftedChat.append(previousMessages, messages)
         );
         const { _id, createdAt, text, user } = messages[0];    
-        addDoc(collection(database, 'chats'), {
+        addDoc(collection(database,`group${route.params.name}`), {
           _id,
           createdAt,
           text,
           user
         });
       }, []);
-
+    
+      const inputStyle = {
+         marginLeft: 15,
+        marginRight: 15,
+        borderWidth: 0.5,
+        borderColor: 'grey',
+        borderRadius: 25
+      };
       return (
-        <GiftedChat
+          <GiftedChat
           messages={messages}
+          renderSend={(props) =>{
+            return (
+              <Send {...props}  containerStyle={{ borderWidth: 0, justifyContent:'center', marginRight:20}}>
+                  <FontAwesome name="send" size={24} color="black" />
+              </Send>
+            );
+          }}
           showAvatarForEveryMessage={false}
           showUserAvatar={false}
           onSend={messages => onSend(messages)}
+          // alwaysShowSend={true}
+          renderInputToolbar={props => (
+            <InputToolbar
+            {...props}
+              containerStyle={inputStyle}
+              placeholder="Aa"      
+            />
+          )}
           messagesContainerStyle={{
             backgroundColor: '#fff'
           }}
@@ -89,6 +117,7 @@ import {auth,database} from '../../../../config/firebase'
             backgroundColor: '#fff',
             borderRadius: 20,
           }}
+          
           user={{
             _id: auth?.currentUser?.email,
             avatar: 'https://i.pravatar.cc/300'

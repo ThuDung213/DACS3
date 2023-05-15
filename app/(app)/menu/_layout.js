@@ -17,6 +17,13 @@ export default () => {
                 headerShown: false,
             }}
             />
+             <Tabs.Screen name='forum' options={{
+                tabBarIcon: ({ color }) => (
+                    <FontAwesome name="star" size={24} color={color} />
+                ),
+                headerShown: false,
+            }}
+            />
             <Tabs.Screen name='profile' options={{
                 tabBarIcon: ({ color }) => (
                     <FontAwesome name="user-circle-o" size={24} color={color} />
