@@ -1,13 +1,15 @@
 import { StatusBar, } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView, Platform } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView, Platform, Button } from 'react-native';
 import { Surface, Title, TextInput } from 'react-native-paper';
 import ModalView from './ModalView';
-import {auth} from '../../../../config/firebase'
+import { auth } from '../../../../config/firebase'
 import PostCardItem from '../../../../components/common/cards/posts/Postcard';
-
+import Comment from './Comment';
+import { useRouter } from 'expo-router';
 // update this url -> "<new_ngrok_host_url>/posts"
-const url = 'http://192.168.1.8:3000/posts'
+const url = 'http://192.168.1.11:3000/posts'
+const commentUrl = 'http://192.168.1.11:3000/comments'
 
 const headers = {
   'Content-Type': 'application/json',
@@ -21,8 +23,9 @@ export default function App() {
   const [desc, setDesc] = useState('');
   const [postId, setPostId] = useState(0);
   const [loading, setLoading] = useState(false);
-
-  const userEmail = auth?.currentUser?.email
+  const [comment, setComment] = useState('');
+  const userEmail = auth?.currentUser?.email;
+  const [showComments, setShowComments] = useState(false);
 
   const getPosts = async () => {
     setLoading(true)
@@ -35,7 +38,7 @@ export default function App() {
     setLoading(false)
   }
 
-  const addPost = (title, desc,userEmail) => {
+  const addPost = (title, desc, userEmail) => {
     fetch(url, {
       method: "POST",
       headers,
@@ -92,6 +95,32 @@ export default function App() {
     setDesc(desc)
   }
 
+  const openCommentsScreen = (id) => {
+    setPostId(id);
+    setShowComments(true);
+  };
+  const addComment = (postId, comment) => {
+    fetch(commentUrl, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        "postId": postId,
+        "comment": [comment],
+        "user": userEmail
+      })
+    }).then((res) => res.json())
+      .then(resJson => {
+        console.log('post:', resJson)
+        updateComment()
+      }).catch(e => { console.log(e) })
+
+  }
+  const updateComment = () => {
+    setShowComments(false);
+    setComment('');
+  }
+
+
   useEffect(() => {
     getPosts();
   }, [])
@@ -115,8 +144,10 @@ export default function App() {
             currentUser={userEmail}
             title={item.title}
             desc={item.desc}
+            id={item.id}
             onEdit={() => edit(item.id, item.title, item.desc)}
             onDelete={() => deletePost(item.id)}
+            onComment={() => openCommentsScreen(item.id)}
           />
         )}
       />
@@ -146,6 +177,18 @@ export default function App() {
           mode="outlined"
         />
       </ModalView>
+      <Comment
+        showComments={showComments}
+        onDismiss={() => setShowComments(false)}
+        onAddComment={() => addComment(postId, comment)}
+      >
+        <TextInput
+          placeholder='Your comment'
+          value={comment}
+          onChangeText={(text) => setComment(text)}
+          mode="outlined"
+        />
+      </Comment>
     </SafeAreaView>
   );
 }
