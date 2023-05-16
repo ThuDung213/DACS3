@@ -1,6 +1,6 @@
 import { StatusBar, } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView, Platform } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView, Platform, Button } from 'react-native';
 import { Surface, Title, TextInput } from 'react-native-paper';
 import ModalView from './ModalView';
 import {auth} from '../../../../config/firebase'
@@ -13,6 +13,8 @@ const headers = {
   'Content-Type': 'application/json',
   'Accept': 'application/json',
 };
+
+console.log(auth?.currentUser?.email)
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -42,11 +44,10 @@ export default function App() {
       body: JSON.stringify({
         "desc": desc,
         "title": title,
-        "user": userEmail
+        "user": userEmail,
       })
     }).then((res) => res.json())
       .then(resJson => {
-        console.log('post:', resJson)
         updatePost()
       }).catch(e => { console.log(e) })
   }
@@ -58,6 +59,7 @@ export default function App() {
       body: JSON.stringify({
         "desc": desc,
         "title": title,
+        "user": userEmail,
       })
     }).then((res) => res.json())
       .then(resJson => {
@@ -91,6 +93,7 @@ export default function App() {
     setTitle(title)
     setDesc(desc)
   }
+ 
 
   useEffect(() => {
     getPosts();
@@ -113,6 +116,7 @@ export default function App() {
         renderItem={({ item }) => (
           <PostCardItem
             currentUser={userEmail}
+            userPost={item.user}
             title={item.title}
             desc={item.desc}
             onEdit={() => edit(item.id, item.title, item.desc)}

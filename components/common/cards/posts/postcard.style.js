@@ -20,6 +20,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight:'bold'
   },
+  containerActi:{
+    flex:1,
+    justifyContent:'space-between',
+    flexDirection: 'row',
+    marginBottom: 10
+  },
+  user:{
+    flex:1,
+    justifyContent: 'flex-start',
+    flexDirection:'row'
+  },
+  username:{
+    marginLeft:10,
+    fontWeight: '700',
+    alignSelf: 'center'
+  }
 })
 
 export default styles
