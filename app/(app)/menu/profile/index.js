@@ -13,7 +13,7 @@ import {
 import { User } from "./User"
 
 import { FontAwesome5 } from '@expo/vector-icons';
-import { set } from 'react-native-reanimated';
+import { signOut } from '@firebase/auth';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -21,9 +21,16 @@ const Profile = () => {
         const currentUser = new User();
         currentUser.getUser().then(() => {
             setUser(currentUser);
-            // console.log("image", user?.image)
         })
     }, []);
+    async function handleSignOut() {
+        try {
+            await signOut(auth);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -93,10 +100,10 @@ const Profile = () => {
                         <Text style={styles.menuItemText}>Support</Text>
                     </View>
                 </TouchableRipple>
-                <TouchableRipple onPress={() => { }}>
+                <TouchableRipple onPress={handleSignOut}>
                     <View style={styles.menuItem}>
                         <FontAwesome5 name="tools" color="#FF6347" size={25} />
-                        <Text style={styles.menuItemText}>Setting</Text>
+                        <Text style={styles.menuItemText}>Sign Out</Text>
                     </View>
                 </TouchableRipple>
             </View>

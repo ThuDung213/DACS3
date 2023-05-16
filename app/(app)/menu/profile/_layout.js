@@ -18,9 +18,9 @@ export default () => {
                 },
                 headerShadowVisible: false,
                 headerTintColor: colors.text,
-                headerLeft: () => (
-                    <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
-                ),
+                // headerLeft: () => (
+                //     <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
+                // ),
                 headerRight: () => (
                     <FontAwesome.Button
                         name="edit"

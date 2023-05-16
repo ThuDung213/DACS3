@@ -4,6 +4,7 @@ import { COLORS, SIZES } from "../../../constants";
 
 const styles = StyleSheet.create({
   btnContainer: {
+    margin: 10,
     width: 40,
     height: 40,
     backgroundColor: COLORS.white,
