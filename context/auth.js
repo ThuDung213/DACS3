@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 import { auth } from "../config/firebase";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification } from "firebase/auth";
 
-const AuthContext = React.createContext(null);
+export const AuthContext = React.createContext(null);
 
 
 // This hook can be used to access the user info.

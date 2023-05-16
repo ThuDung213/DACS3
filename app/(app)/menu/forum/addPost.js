@@ -1,5 +1,6 @@
 import { View, Text, TextInput, Button } from "react-native";
 import { useState } from "react";
+import {auth} from '../../../../config/firebase';
 
 const AddProduct = () => {
     const [title, setTitle] = useState('');
@@ -7,7 +8,7 @@ const AddProduct = () => {
 
     const SaveProduct = () => {
         // tạo đối tượng dữ liệu
-        let objSP = { title: title, desc: desc };
+        let objSP = { title: title, desc: desc, userEmail: auth?.currentUser?.email };
         let url_api = 'http://192.168.1.8:3000/posts';
 
         fetch(url_api, {
@@ -25,6 +26,10 @@ const AddProduct = () => {
             .catch((ex) => {
                 console.log(ex);
             });
+
+    }
+
+    const editPost = () => {
 
     }
 

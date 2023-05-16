@@ -1,41 +1,31 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import styles from "./postcard.style";
+import {  Text, View, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { Card } from 'react-native-paper';
+import styles from './postcard.style';
+import { Feather } from '@expo/vector-icons';
 
-const PopularJobCard = ({ post, handleActivity }) => {
+const Button = ({ onPress, style, icon }) => (
+  <TouchableOpacity style={style} onPress={onPress}>
+    <Feather name={icon} size={24} />
+  </TouchableOpacity>
+)
+
+export default function PostCardItem({ title, desc, onEdit, onDelete,currentUser }) {
   return (
-    <TouchableOpacity
-      style={styles.container}
-      //   onPress={() => handleCardPress(post)}
-    >
-      <View>
-        <Image />
-        <View  style={styles.function}>
-          <TouchableOpacity>
-            <FontAwesome
-              name="pencil"
-              style={{ marginRight: 10, fontSize: 17 }}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={handleActivity}>
-            <FontAwesome
-              name="trash"
-              color="#d60505"
-              style={{ marginRight: 10, fontSize: 17 }}
-            />
-          </TouchableOpacity>
+    <Card style={styles.item}>
+      <View style={styles.rowView}>
+          <Button
+            onPress={onEdit}
+            icon="edit"
+            style={{ marginHorizontal: 16 }} />
+          <Button onPress={onDelete} icon='trash-2' />
+      </View>
+      <View style={styles.postItem}>
+        <View>
+          <Text style={styles.title}>{title}</Text>
+          <Text> {desc}</Text>
         </View>
       </View>
-      <Text style={styles.postTitle}>{post.title}</Text>
-
-      <View>
-        <Text numberOfLines={1} style={styles.postDesc}>
-          {post.desc}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-export default PopularJobCard;
+    </Card>
+  )
+}

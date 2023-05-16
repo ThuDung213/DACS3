@@ -122,6 +122,7 @@ import { View } from 'react-native-web';
             _id: auth?.currentUser?.email,
             avatar: 'https://i.pravatar.cc/300'
           }}
+        
         />
       );
 }

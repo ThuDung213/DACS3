@@ -11,16 +11,20 @@ import { useRouter } from "expo-router";
 
 import styles from "./welcome.style";
 import { icons, SIZES } from "../../../constants";
-
+import { AuthContext } from "../../../context/auth";
+import React from "react";
+import { auth } from "../../../config/firebase";
 const jobTypes = ["Full-time", "Part-time", "Contractor"];
 
 const Welcome = ({ searchTerm, setSearchTerm, handleClick, email }) => {
+  // const { user } = React.useContext(AuthContext);
+  const user = auth.currentUser;
   const router = useRouter();
   const [activeJobType, setActiveJobType] = useState("Full-time");
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.userName}>Hello {email}</Text>
+        <Text style={styles.userName}>Hello {user.uid}</Text>
         <Text style={styles.welcomeMessage}>Find your suitable courses </Text>
       </View>
 
