@@ -37,6 +37,12 @@
       "title": "dek",
       "user": "quocxuan@gmail.com",
       "id": 9
+    },
+    {
+      "desc": "A bout js",
+      "title": "Xuân quốc 1",
+      "user": "xuanquoc1@gmail.com",
+      "id": 10
     }
   ],
   "comments": [
@@ -51,6 +57,30 @@
       "comment": "Okee",
       "user": "quocxuan@gmail.com",
       "id": 27
+    },
+    {
+      "postId": 10,
+      "comment": "Haha",
+      "user": "xuanquoc1@gmail.com",
+      "id": 28
+    },
+    {
+      "postId": 8,
+      "comment": "Lq",
+      "user": "quocxuan@gmail.com",
+      "id": 29
+    },
+    {
+      "postId": 6,
+      "comment": "123",
+      "user": "quocxuan@gmail.com",
+      "id": 30
+    },
+    {
+      "postId": 10,
+      "comment": "oke luôn",
+      "user": "quocxuan@gmail.com",
+      "id": 31
     }
   ]
 }

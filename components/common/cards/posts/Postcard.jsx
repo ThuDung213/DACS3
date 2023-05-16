@@ -1,8 +1,8 @@
-import { Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Card } from 'react-native-paper';
-import styles from './postcard.style';
-import { Feather, Ionicons } from '@expo/vector-icons';
+import { Text, View, TouchableOpacity } from "react-native";
+import React from "react";
+import { Card } from "react-native-paper";
+import styles from "./postcard.style";
+import { Feather, Ionicons } from "@expo/vector-icons";
 import { Avatar } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { User } from "../../../../app/(app)/menu/profile/User";
@@ -19,7 +19,7 @@ export default function PostCardItem({
   onEdit,
   onDelete,
   currentUser,
-  onComment
+  onComment,
 }) {
   const [user, setUser] = useState(null);
   React.useEffect(() => {
@@ -36,6 +36,20 @@ export default function PostCardItem({
             <View>
               <Text style={styles.title}>{title}</Text>
               <Text> {desc}</Text>
+            </View>
+            <View style={{ flexDirection: "row" }}>
+              <Button
+                onPress={() => {}}
+                icon="heart"
+                color="#73788B"
+                style={{ paddingTop: 4, marginRight: 16 }}
+              />
+              <Button
+                icon="message-square"
+                color="#73788B"
+                onPress={onComment}
+                style={{ paddingTop: 4 }}
+              />
             </View>
           </View>
         </Card>
@@ -65,18 +79,19 @@ export default function PostCardItem({
               <Text style={styles.title}>{title}</Text>
               <Text> {desc}</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: "row" }}>
               <Button
-                onPress={() => { }}
-                icon='heart'
+                onPress={() => {}}
+                icon="heart"
                 color="#73788B"
                 style={{ paddingTop: 4, marginRight: 16 }}
               />
               <Button
-                icon='message-square'
+                icon="message-square"
                 color="#73788B"
                 onPress={onComment}
-                style={{ paddingTop: 4 }} />
+                style={{ paddingTop: 4 }}
+              />
             </View>
           </View>
         </Card>

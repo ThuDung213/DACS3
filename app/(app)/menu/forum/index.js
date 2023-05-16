@@ -30,22 +30,21 @@ const headers = {
   Accept: "application/json",
 };
 
-
 export default function App() {
-    const [data, setData] = useState([]);
-    const [dataComment, setDataComment] = useState([]);
-    const [visible, setVisible] = useState(false);
-    const [title, setTitle] = useState("");
-    const [desc, setDesc] = useState("");
-    const [postId, setPostId] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [comment, setComment] = useState("");
-    const userEmail = auth?.currentUser?.email;
-    const [showComments, setShowComments] = useState(false);
-    
-    
-    const navigation = useNavigation();
-    const getPosts = async () => {
+  const [data, setData] = useState([]);
+  const [dataComment, setDataComment] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [postId, setPostId] = useState(0);
+  const [loading, setLoading] = useState(false);
+  // const [heart,]
+  const [comment, setComment] = useState("");
+  const userEmail = auth?.currentUser?.email;
+  const [showComments, setShowComments] = useState(false);
+
+  const navigation = useNavigation();
+  const getPosts = async () => {
     setLoading(true);
     await fetch(url)
       .then((res) => res.json())
@@ -55,7 +54,6 @@ export default function App() {
       .catch((e) => console.log(e));
     setLoading(false);
   };
-
 
   const getComment = async () => {
     setLoading(true);
@@ -178,7 +176,9 @@ export default function App() {
   useEffect(() => {
     getPosts();
     getComment();
-    navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' }, tabBarVisible: false });
+    navigation
+      .getParent()
+      ?.setOptions({ tabBarStyle: { display: "none" }, tabBarVisible: false });
   }, []);
 
   console.log(dataComment);
@@ -247,31 +247,40 @@ export default function App() {
           onDismiss={() => setShowComments(false)}
           onAddComment={() => addComment(postId, comment)}
         >
-          
-            <ScrollView >
-              {
-                dataComment.map((item) => {
-                    return(
-                        <View style={{flexDirection:'row', marginVertical: 6}}>
-                      <Avatar.Image
-                        source={{
-                          uri: user?.image,
-                        }}
-                        size={40}
-                      />
-                      <Text style={{marginLeft:10, alignSelf: 'center'}}>{item.comment}</Text>
-                    </View>
-                    )
-                })
+          <SafeAreaView>
+          <ScrollView>
+            {dataComment.map((item) => {
+              if (item.postId == postId) {
+                return (
+                  <View
+                    key={item.id}
+                    style={{ flexDirection: "row", marginVertical: 6 }}
+                  >
+                    <Avatar.Image
+                      source={{
+                        uri: user?.image,
+                      }}
+                      size={40}
+                    />
+                    <Text style={{ marginLeft: 10, alignSelf: "center" }}>
+                      {item.comment}
+                    </Text>
+                  </View>
+                );
               }
-            </ScrollView>
+            })}
+          </ScrollView>
 
           <TextInput
             placeholder="Your comment"
             value={comment}
             onChangeText={(text) => setComment(text)}
             mode="outlined"
+            style={{
+              marginVertical:10
+            }}
           />
+          </SafeAreaView>
         </Comment>
       )}
     </SafeAreaView>
