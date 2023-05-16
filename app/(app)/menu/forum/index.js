@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Platform,
   Button,
+  ScrollView,
 } from "react-native";
 import { User } from "../profile/User";
 import { Surface, Title, TextInput } from "react-native-paper";
@@ -21,7 +22,7 @@ import Comment from "./Comment";
 import { useRouter } from "expo-router";
 // update this url -> "<new_ngrok_host_url>/posts"
 const url = "http://192.168.1.8:3000/posts";
-const commentUrl = " http://192.168.1.8:3000/comments";
+const commentUrl = "http://192.168.1.8:3000/comments";
 
 const headers = {
   "Content-Type": "application/json",
@@ -58,10 +59,12 @@ export default function App() {
     await fetch(commentUrl)
       .then((res) => res.json())
       .then((res) => {
+        console.log("comment:",res)
         setDataComment(res);
       })
       .catch((e) => console.log(e));
     setLoading(false);
+    
   };
 
   const addPost = (title, desc, userEmail) => {
@@ -159,6 +162,7 @@ export default function App() {
   };
   const updateComment = () => {
     setShowComments(false);
+    getComment();
     setComment("");
   };
 
@@ -172,7 +176,10 @@ export default function App() {
 
   useEffect(() => {
     getPosts();
+    getComment();
   }, []);
+
+  console.log(dataComment)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -238,26 +245,30 @@ export default function App() {
           onDismiss={() => setShowComments(false)}
           onAddComment={() => addComment(postId, comment)}
         >
-          <FlatList
-            data={dataComment}
-            keyExtractor={(item, index) => item.id + index.toString()}
-            refreshing={loading}
-            onRefresh={getComment}
-            renderItem={({ item }) => (
-              <View>
-                {/* <View>
-                  <Avatar.Image
-                    source={{
-                      uri: user?.image,
-                    }}
-                    size={40}
-                  />
-                  <Text>{item.comment}</Text>
-                </View> */}
-                <Text>oke</Text>
-              </View>
-            )}
-          />
+          
+          <View>
+            <FlatList
+              data={dataComment}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              refreshing={loading}
+              onRefresh={getComment}
+              renderItem={({ item }) => (
+                <View>
+                  <View>
+                    <Avatar.Image
+                      source={{
+                        uri: user?.image,
+                      }}
+                      size={40}
+                    />
+                    <Text>{item.comment}</Text>
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        
+
           <TextInput
             placeholder="Your comment"
             value={comment}

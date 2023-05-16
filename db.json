@@ -41,112 +41,6 @@
   ],
   "comments": [
     {
-      "postId": 4,
-      "comment": "",
-      "user": "heo@gmail.com",
-      "id": 1
-    },
-    {
-      "postId": 4,
-      "comment": "",
-      "user": "heo@gmail.com",
-      "id": 2
-    },
-    {
-      "postId": 6,
-      "comment": "",
-      "user": "heo@gmail.com",
-      "id": 3
-    },
-    {
-      "postId": 6,
-      "comment": [
-        ""
-      ],
-      "user": "heo@gmail.com",
-      "id": 4
-    },
-    {
-      "postId": 4,
-      "comment": [
-        ""
-      ],
-      "user": "heo@gmail.com",
-      "id": 5
-    },
-    {
-      "postId": 4,
-      "comment": [
-        ""
-      ],
-      "user": "heo@gmail.com",
-      "id": 6
-    },
-    {
-      "postId": 7,
-      "comment": [
-        ""
-      ],
-      "user": "heo@gmail.com",
-      "id": 7
-    },
-    {
-      "postId": 4,
-      "comment": [
-        ""
-      ],
-      "user": "heo@gmail.com",
-      "id": 8
-    },
-    {
-      "postId": 6,
-      "comment": [
-        ""
-      ],
-      "user": "heo@gmail.com",
-      "id": 9
-    },
-    {
-      "postId": 6,
-      "comment": [
-        "hihi"
-      ],
-      "user": "heo@gmail.com",
-      "id": 10
-    },
-    {
-      "postId": 4,
-      "comment": [
-        "test"
-      ],
-      "user": "heo@gmail.com",
-      "id": 11
-    },
-    {
-      "postId": 4,
-      "comment": [
-        "hello"
-      ],
-      "user": "heo@gmail.com",
-      "id": 12
-    },
-    {
-      "postId": 6,
-      "comment": [
-        "hello"
-      ],
-      "user": "heo@gmail.com",
-      "id": 13
-    },
-    {
-      "postId": 6,
-      "comment": [
-        "hi"
-      ],
-      "user": "jun1@gmail.com",
-      "id": 14
-    },
-    {
       "postId": 9,
       "comment": [
         "hay"
@@ -183,6 +77,42 @@
       "comment": "l",
       "user": "quocxuan@gmail.com",
       "id": 19
+    },
+    {
+      "postId": 9,
+      "comment": "ddd",
+      "user": "quocxuan@gmail.com",
+      "id": 20
+    },
+    {
+      "postId": 9,
+      "comment": "",
+      "user": "quocxuan@gmail.com",
+      "id": 21
+    },
+    {
+      "postId": 9,
+      "comment": "haha",
+      "user": "quocxuan@gmail.com",
+      "id": 22
+    },
+    {
+      "postId": 9,
+      "comment": "Ok",
+      "user": "quocxuan@gmail.com",
+      "id": 23
+    },
+    {
+      "postId": 9,
+      "comment": "Olll",
+      "user": "quocxuan@gmail.com",
+      "id": 24
+    },
+    {
+      "postId": 9,
+      "comment": "Olk",
+      "user": "quocxuan@gmail.com",
+      "id": 25
     }
   ]
 }
