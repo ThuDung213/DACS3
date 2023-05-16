@@ -14,17 +14,24 @@ import { icons, SIZES } from "../../../constants";
 import { AuthContext } from "../../../context/auth";
 import React from "react";
 import { auth } from "../../../config/firebase";
+import { User } from "../../../app/(app)/menu/profile/User";
 const jobTypes = ["Full-time", "Part-time", "Contractor"];
 
 const Welcome = ({ searchTerm, setSearchTerm, handleClick, email }) => {
-  // const { user } = React.useContext(AuthContext);
-  const user = auth.currentUser;
+  // const user = auth.currentUser;
   const router = useRouter();
   const [activeJobType, setActiveJobType] = useState("Full-time");
+  const [user, setUser] = useState(null);
+  React.useEffect(() => {
+    const currentUser = new User();
+    currentUser.getUser().then(() => {
+      setUser(currentUser);
+    });
+  }, []);
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.userName}>Hello {user.uid}</Text>
+        <Text style={styles.userName}>{user?.userName}</Text>
         <Text style={styles.welcomeMessage}>Find your suitable courses </Text>
       </View>
 

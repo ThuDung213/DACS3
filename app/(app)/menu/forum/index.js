@@ -16,6 +16,8 @@ const headers = {
   'Accept': 'application/json',
 };
 
+console.log(auth?.currentUser?.email)
+
 export default function App() {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -45,11 +47,10 @@ export default function App() {
       body: JSON.stringify({
         "desc": desc,
         "title": title,
-        "user": userEmail
+        "user": userEmail,
       })
     }).then((res) => res.json())
       .then(resJson => {
-        console.log('post:', resJson)
         updatePost()
       }).catch(e => { console.log(e) })
   }
@@ -61,6 +62,7 @@ export default function App() {
       body: JSON.stringify({
         "desc": desc,
         "title": title,
+        "user": userEmail,
       })
     }).then((res) => res.json())
       .then(resJson => {
@@ -94,6 +96,7 @@ export default function App() {
     setTitle(title)
     setDesc(desc)
   }
+ 
 
   const openCommentsScreen = (id) => {
     setPostId(id);
@@ -142,6 +145,7 @@ export default function App() {
         renderItem={({ item }) => (
           <PostCardItem
             currentUser={userEmail}
+            userPost={item.user}
             title={item.title}
             desc={item.desc}
             id={item.id}
