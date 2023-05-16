@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   FlatList,
   StyleSheet,
@@ -29,7 +30,6 @@ const headers = {
   Accept: "application/json",
 };
 
-console.log(auth?.currentUser?.email);
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -43,6 +43,8 @@ export default function App() {
   const userEmail = auth?.currentUser?.email;
   const [showComments, setShowComments] = useState(false);
 
+
+  const navigation = useNavigation();
   const getPosts = async () => {
     setLoading(true);
     await fetch(url)
@@ -54,17 +56,16 @@ export default function App() {
     setLoading(false);
   };
 
+
   const getComment = async () => {
     setLoading(true);
     await fetch(commentUrl)
       .then((res) => res.json())
       .then((res) => {
-        console.log("comment:", res)
         setDataComment(res);
       })
       .catch((e) => console.log(e));
     setLoading(false);
-
   };
 
   const addPost = (title, desc, userEmail) => {
@@ -177,9 +178,10 @@ export default function App() {
   useEffect(() => {
     getPosts();
     getComment();
+    navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' }, tabBarVisible: false });
   }, []);
 
-  console.log(dataComment)
+  console.log(dataComment);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -246,28 +248,23 @@ export default function App() {
           onAddComment={() => addComment(postId, comment)}
         >
 
-          <View>
-            <FlatList
-              data={dataComment}
-              keyExtractor={(item, index) => item.id + index.toString()}
-              refreshing={loading}
-              onRefresh={getComment}
-              renderItem={({ item }) => (
-                <View>
-                  <View>
+          <ScrollView >
+            {
+              dataComment.map((item) => {
+                return (
+                  <View style={{ flexDirection: 'row', marginVertical: 6 }}>
                     <Avatar.Image
                       source={{
                         uri: user?.image,
                       }}
                       size={40}
                     />
-                    <Text>{item.comment}</Text>
+                    <Text style={{ marginLeft: 10, alignSelf: 'center' }}>{item.comment}</Text>
                   </View>
-                </View>
-              )}
-            />
-          </View>
-
+                )
+              })
+            }
+          </ScrollView>
 
           <TextInput
             placeholder="Your comment"
