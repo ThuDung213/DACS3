@@ -17,6 +17,7 @@ export default function Comment({ showComment, onAddComment, onDismiss, children
             </View>
             <View>
                 <Button title="Add Comment" onPress={onAddComment} />
+                <Button title='Cancel' onPress={onDismiss} />
             </View>
 
         </View>
