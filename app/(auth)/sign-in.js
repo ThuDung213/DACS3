@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { Ionicons } from '@expo/vector-icons'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 export default function SignIn({ onPress }) {
@@ -33,50 +34,52 @@ export default function SignIn({ onPress }) {
                     headerShadowVisible: false,
                     headerTitle: ""
                 }} />
-            <KeyboardAvoidingView style={styles.container}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                <Image
-                    source={require('../../assets/images/REG.avif')}
-                    style={{ width: 400, height: 300 }}
-                />
-                <Text style={styles.wel}>Welcome back!</Text>
+            <ScrollView>
+                <KeyboardAvoidingView style={styles.container}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                    <Image
+                        source={require('../../assets/images/REG.avif')}
+                        style={{ width: 400, height: 300 }}
+                    />
+                    <Text style={styles.wel}>Welcome back!</Text>
 
-                <View style={styles.container}>
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="mail-outline" size={25} style={styles.icon} />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Email"
-                            value={email}
-                            onChangeText={(text) => setEmail(text)}
-                        />
+                    <View style={styles.container}>
+                        <View style={styles.inputContainer}>
+                            <Ionicons name="mail-outline" size={25} style={styles.icon} />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                value={email}
+                                onChangeText={(text) => setEmail(text)}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Ionicons name="key" size={25} style={styles.icon} />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Password"
+                                value={password}
+                                onChangeText={(text) => setPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
                     </View>
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="key" size={25} style={styles.icon} />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Password"
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
-                            secureTextEntry
-                        />
+
+
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.container} onPress={handleSignIn}>
+                            <Text style={styles.signIn}>Sign In</Text>
+                        </TouchableOpacity>
                     </View>
-                </View>
 
-
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.container} onPress={handleSignIn}>
-                        <Text style={styles.signIn}>Sign In</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.account}>
-                    <Text style={styles.acc}>
-                        You're new here? &nbsp;
-                        <Text style={[styles.acc, styles.link]} onPress={() => { router.push("/sign-up") }}>SignUp</Text>
-                    </Text>
-                </View>
-            </KeyboardAvoidingView>
+                    <View style={styles.account}>
+                        <Text style={styles.acc}>
+                            You're new here? &nbsp;
+                            <Text style={[styles.acc, styles.link]} onPress={() => { router.push("/sign-up") }}>SignUp</Text>
+                        </Text>
+                    </View>
+                </KeyboardAvoidingView>
+            </ScrollView>
         </SafeAreaView>
     );
 }

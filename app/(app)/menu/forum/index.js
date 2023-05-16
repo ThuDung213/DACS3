@@ -22,8 +22,8 @@ import PostCardItem from "../../../../components/common/cards/posts/Postcard";
 import Comment from "./Comment";
 import { useRouter } from "expo-router";
 // update this url -> "<new_ngrok_host_url>/posts"
-const url = "http://192.168.1.8:3000/posts";
-const commentUrl = "http://192.168.1.8:3000/comments";
+const url = "http://192.168.1.11:3000/posts";
+const commentUrl = "http://192.168.1.11:3000/comments";
 
 const headers = {
   "Content-Type": "application/json",
