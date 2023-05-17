@@ -3,9 +3,6 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 export default function Comment({ showComment, onAddComment, onDismiss, children }) {
 
-    // if (!showComment) {
-    //     return null;
-    // }
 
     return (
         <View

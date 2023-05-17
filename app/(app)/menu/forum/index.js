@@ -22,8 +22,8 @@ import PostCardItem from "../../../../components/common/cards/posts/Postcard";
 import Comment from "./Comment";
 import { useRouter } from "expo-router";
 // update this url -> "<new_ngrok_host_url>/posts"
-const url = "http://192.168.1.11:3000/posts";
-const commentUrl = "http://192.168.1.11:3000/comments";
+const url = "http://192.168.77.182:3000/posts";
+const commentUrl = "http://192.168.77.182:3000/comments";
 
 const headers = {
   "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export default function App() {
   const [desc, setDesc] = useState("");
   const [postId, setPostId] = useState(0);
   const [loading, setLoading] = useState(false);
-  // const [heart,]
+  const [heart,setHeart] = useState("white");
   const [comment, setComment] = useState("");
   const userEmail = auth?.currentUser?.email;
   const [showComments, setShowComments] = useState(false);
@@ -181,7 +181,7 @@ export default function App() {
       ?.setOptions({ tabBarStyle: { display: "none" }, tabBarVisible: false });
   }, []);
 
-  console.log(dataComment);
+ 
 
   return (
     <SafeAreaView style={styles.container}>
@@ -210,6 +210,16 @@ export default function App() {
             onEdit={() => edit(item.id, item.title, item.desc)}
             onDelete={() => deletePost(item.id)}
             onComment={() => openCommentsScreen(item.id)}
+            onHeart={()=>{
+              if(item.id == postId){
+                if(heart == 'red'){
+                  setHeart('white')
+                }else if(heart == 'white'){
+                  setHeart('red')
+                }
+              }
+            }}
+            colorHeart={heart}
           />
         )}
       />

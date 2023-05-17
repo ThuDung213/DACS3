@@ -6,9 +6,10 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { Avatar } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { User } from "../../../../app/(app)/menu/profile/User";
-const Button = ({ onPress, style, icon }) => (
+
+const Button = ({ onPress, style,color, icon }) => (
   <TouchableOpacity style={style} onPress={onPress}>
-    <Feather name={icon} size={24} />
+    <Feather name={icon} size={24} color={color}/>
   </TouchableOpacity>
 );
 
@@ -20,6 +21,8 @@ export default function PostCardItem({
   onDelete,
   currentUser,
   onComment,
+  onHeart,
+  colorHeart
 }) {
   const [user, setUser] = useState(null);
   React.useEffect(() => {
@@ -38,10 +41,13 @@ export default function PostCardItem({
               <Text> {desc}</Text>
             </View>
             <View style={{ flexDirection: "row" }}>
+              {/* <TouchableOpacity>
+                <Icon name=""/>
+              </TouchableOpacity> */}
               <Button
-                onPress={() => {}}
+                onPress={onHeart}
                 icon="heart"
-                color="#73788B"
+                color={colorHeart}
                 style={{ paddingTop: 4, marginRight: 16 }}
               />
               <Button
@@ -81,9 +87,9 @@ export default function PostCardItem({
             </View>
             <View style={{ flexDirection: "row" }}>
               <Button
-                onPress={() => {}}
+                onPress={onHeart}
                 icon="heart"
-                color="#73788B"
+                color={colorHeart}
                 style={{ paddingTop: 4, marginRight: 16 }}
               />
               <Button
