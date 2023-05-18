@@ -42,6 +42,7 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick, email }) => {
             value={searchTerm}
             onChangeText={(text) => setSearchTerm(text)}
             placeholder="What are you looking for?"
+
           />
         </View>
 

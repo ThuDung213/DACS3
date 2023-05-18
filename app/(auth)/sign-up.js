@@ -42,18 +42,18 @@ export default function SignUp({ onPress }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.whiteList }}>
             <Stack.Screen
                 options={{
-                    headerStyle: { backgroundColor: COLORS.lightWhite },
+                    headerStyle: { backgroundColor: COLORS.whiteList },
                     headerShadowVisible: false,
                     headerTitle: ""
                 }} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"}>
                     <Image
-                        source={require('../../assets/images/signup.avif')}
-                        style={{ width: 400, height: 300 }}
+                        source={require('../../assets/images/10.jpg')}
+                        style={{ marginTop: 15, width: 300, height: 200 }}
                     />
                     <Text style={styles.wel}>Welcome to Our App!</Text>
 
