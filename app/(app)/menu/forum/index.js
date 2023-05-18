@@ -22,8 +22,8 @@ import PostCardItem from "../../../../components/common/cards/posts/Postcard";
 import Comment from "./Comment";
 import { useRouter } from "expo-router";
 // update this url -> "<new_ngrok_host_url>/posts"
-const url = "http://192.168.77.182:3000/posts";
-const commentUrl = "http://192.168.77.182:3000/comments";
+const url = "http://192.168.77.223:3000/posts";
+const commentUrl = "http://192.168.77.223:3000/comments";
 
 const headers = {
   "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export default function App() {
   const [desc, setDesc] = useState("");
   const [postId, setPostId] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [heart,setHeart] = useState("white");
+  const [heart, setHeart] = useState("white");
   const [comment, setComment] = useState("");
   const userEmail = auth?.currentUser?.email;
   const [showComments, setShowComments] = useState(false);
@@ -181,7 +181,7 @@ export default function App() {
       ?.setOptions({ tabBarStyle: { display: "none" }, tabBarVisible: false });
   }, []);
 
- 
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -210,11 +210,11 @@ export default function App() {
             onEdit={() => edit(item.id, item.title, item.desc)}
             onDelete={() => deletePost(item.id)}
             onComment={() => openCommentsScreen(item.id)}
-            onHeart={()=>{
-              if(item.id == postId){
-                if(heart == 'red'){
+            onHeart={() => {
+              if (item.id == postId) {
+                if (heart == 'red') {
                   setHeart('white')
-                }else if(heart == 'white'){
+                } else if (heart == 'white') {
                   setHeart('red')
                 }
               }
@@ -258,38 +258,38 @@ export default function App() {
           onAddComment={() => addComment(postId, comment)}
         >
           <SafeAreaView>
-          <ScrollView>
-            {dataComment.map((item) => {
-              if (item.postId == postId) {
-                return (
-                  <View
-                    key={item.id}
-                    style={{ flexDirection: "row", marginVertical: 6 }}
-                  >
-                    <Avatar.Image
-                      source={{
-                        uri: user?.image,
-                      }}
-                      size={40}
-                    />
-                    <Text style={{ marginLeft: 10, alignSelf: "center" }}>
-                      {item.comment}
-                    </Text>
-                  </View>
-                );
-              }
-            })}
-          </ScrollView>
+            <ScrollView>
+              {dataComment.map((item) => {
+                if (item.postId == postId) {
+                  return (
+                    <View
+                      key={item.id}
+                      style={{ flexDirection: "row", marginVertical: 6 }}
+                    >
+                      <Avatar.Image
+                        source={{
+                          uri: user?.image,
+                        }}
+                        size={40}
+                      />
+                      <Text style={{ marginLeft: 10, alignSelf: "center" }}>
+                        {item.comment}
+                      </Text>
+                    </View>
+                  );
+                }
+              })}
+            </ScrollView>
 
-          <TextInput
-            placeholder="Your comment"
-            value={comment}
-            onChangeText={(text) => setComment(text)}
-            mode="outlined"
-            style={{
-              marginVertical:10
-            }}
-          />
+            <TextInput
+              placeholder="Your comment"
+              value={comment}
+              onChangeText={(text) => setComment(text)}
+              mode="outlined"
+              style={{
+                marginVertical: 10
+              }}
+            />
           </SafeAreaView>
         </Comment>
       )}

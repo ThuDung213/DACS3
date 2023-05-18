@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, SafeAreaView, Alert } from "react-native";
 import { useState } from "react";
 import { Stack, useRouter } from "expo-router";
 
@@ -36,8 +36,10 @@ const Home = () => {
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}
                         handleClick={() => {
-                            if (searchTerm) {
+                            if (searchTerm.length > 5) {
                                 router.push(`/search/${searchTerm}`)
+                            } else {
+                                Alert.alert("sdsddd")
                             }
                         }}
                     />
