@@ -6,14 +6,16 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { Avatar } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { User } from "../../../../app/(app)/menu/profile/User";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-const Button = ({ onPress, style,color, icon }) => (
+const Button = ({ onPress, style, color, icon }) => (
   <TouchableOpacity style={style} onPress={onPress}>
-    <Feather name={icon} size={24} color={color}/>
+    <Icon name={icon} size={24} color={color} />
   </TouchableOpacity>
 );
 
 export default function PostCardItem({
+  item,
   title,
   desc,
   userPost,
@@ -22,7 +24,7 @@ export default function PostCardItem({
   currentUser,
   onComment,
   onHeart,
-  colorHeart
+  colorHeart,
 }) {
   const [user, setUser] = useState(null);
   React.useEffect(() => {
@@ -33,6 +35,7 @@ export default function PostCardItem({
   }, []);
   return (
     <View>
+      {console.log(item)}
       {userPost !== currentUser ? (
         <Card style={styles.item}>
           <View style={styles.postItem}>
@@ -41,17 +44,14 @@ export default function PostCardItem({
               <Text> {desc}</Text>
             </View>
             <View style={{ flexDirection: "row" }}>
-              {/* <TouchableOpacity>
-                <Icon name=""/>
-              </TouchableOpacity> */}
               <Button
                 onPress={onHeart}
                 icon="heart"
-                color={colorHeart}
+                color={item.isSaved == undefined ? "white" : "red"}
                 style={{ paddingTop: 4, marginRight: 16 }}
               />
               <Button
-                icon="message-square"
+                icon="comment"
                 color="#73788B"
                 onPress={onComment}
                 style={{ paddingTop: 4 }}
@@ -77,7 +77,7 @@ export default function PostCardItem({
                 icon="edit"
                 style={{ marginHorizontal: 16 }}
               />
-              <Button onPress={onDelete} icon="trash-2" color="red" />
+              <Button onPress={onDelete} icon="trash" color="red" />
             </View>
           </View>
           <View style={styles.postItem}>
@@ -89,11 +89,11 @@ export default function PostCardItem({
               <Button
                 onPress={onHeart}
                 icon="heart"
-                color={colorHeart}
+                color={item.isSaved == undefined ? "white" : "red"}
                 style={{ paddingTop: 4, marginRight: 16 }}
               />
               <Button
-                icon="message-square"
+                icon="comment"
                 color="#73788B"
                 onPress={onComment}
                 style={{ paddingTop: 4 }}

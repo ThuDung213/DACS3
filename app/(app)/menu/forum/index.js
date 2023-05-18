@@ -12,6 +12,7 @@ import {
   Platform,
   Button,
   ScrollView,
+  Alert,
 } from "react-native";
 import { User } from "../profile/User";
 import { Surface, Title, TextInput } from "react-native-paper";
@@ -20,10 +21,10 @@ import { auth } from "../../../../config/firebase";
 import { Avatar } from "react-native-paper";
 import PostCardItem from "../../../../components/common/cards/posts/Postcard";
 import Comment from "./Comment";
-import { useRouter } from "expo-router";
+
 // update this url -> "<new_ngrok_host_url>/posts"
-const url = "http://192.168.77.182:3000/posts";
-const commentUrl = "http://192.168.77.182:3000/comments";
+const url = "http://192.168.2.5:3000/posts";
+const commentUrl = "http://192.168.2.5:3000/comments";
 
 const headers = {
   "Content-Type": "application/json",
@@ -32,13 +33,16 @@ const headers = {
 
 export default function App() {
   const [data, setData] = useState([]);
+  const [fakeData, setFakeData] = useState([]);
+
   const [dataComment, setDataComment] = useState([]);
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [postId, setPostId] = useState(0);
+  // const [isSaved, setIsSaved] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [heart,setHeart] = useState("white");
+  // const [heart,setHeart] = useState("white");
   const [comment, setComment] = useState("");
   const userEmail = auth?.currentUser?.email;
   const [showComments, setShowComments] = useState(false);
@@ -50,11 +54,11 @@ export default function App() {
       .then((res) => res.json())
       .then((res) => {
         setData(res);
+        setFakeData(res);
       })
       .catch((e) => console.log(e));
     setLoading(false);
   };
-
   const getComment = async () => {
     setLoading(true);
     await fetch(commentUrl)
@@ -120,7 +124,7 @@ export default function App() {
       });
   };
 
-  const updatePost = () => {
+  const updatePost = (id) => {
     getPosts();
     setVisible(false);
     setDesc("");
@@ -165,6 +169,8 @@ export default function App() {
     setComment("");
   };
 
+  //getcount
+
   const [user, setUser] = useState(null);
   React.useEffect(() => {
     const currentUser = new User();
@@ -180,8 +186,6 @@ export default function App() {
       .getParent()
       ?.setOptions({ tabBarStyle: { display: "none" }, tabBarVisible: false });
   }, []);
-
- 
 
   return (
     <SafeAreaView style={styles.container}>
@@ -206,20 +210,26 @@ export default function App() {
             userPost={item.user}
             title={item.title}
             desc={item.desc}
+            item={item}
             id={item.id}
             onEdit={() => edit(item.id, item.title, item.desc)}
             onDelete={() => deletePost(item.id)}
             onComment={() => openCommentsScreen(item.id)}
-            onHeart={()=>{
-              if(item.id == postId){
-                if(heart == 'red'){
-                  setHeart('white')
-                }else if(heart == 'white'){
-                  setHeart('red')
+            onHeart={() => {
+              let clonedProducts = data.map((post,index) => {
+                if (item.id == post.id) {
+                  return {
+                    ...post,
+                    isSaved: post.isSaved == false
+                    || post.isSaved == undefined
+                    ? true : false
                 }
-              }
+                  // console.log(post)
+                }
+                return post
+              });
+              setData(clonedProducts);
             }}
-            colorHeart={heart}
           />
         )}
       />
@@ -258,38 +268,38 @@ export default function App() {
           onAddComment={() => addComment(postId, comment)}
         >
           <SafeAreaView>
-          <ScrollView>
-            {dataComment.map((item) => {
-              if (item.postId == postId) {
-                return (
-                  <View
-                    key={item.id}
-                    style={{ flexDirection: "row", marginVertical: 6 }}
-                  >
-                    <Avatar.Image
-                      source={{
-                        uri: user?.image,
-                      }}
-                      size={40}
-                    />
-                    <Text style={{ marginLeft: 10, alignSelf: "center" }}>
-                      {item.comment}
-                    </Text>
-                  </View>
-                );
-              }
-            })}
-          </ScrollView>
+            <ScrollView>
+              {dataComment.map((item) => {
+                if (item.postId == postId) {
+                  return (
+                    <View
+                      key={item.id}
+                      style={{ flexDirection: "row", marginVertical: 6 }}
+                    >
+                      <Avatar.Image
+                        source={{
+                          uri: user?.image,
+                        }}
+                        size={40}
+                      />
+                      <Text style={{ marginLeft: 10, alignSelf: "center" }}>
+                        {item.comment}
+                      </Text>
+                    </View>
+                  );
+                }
+              })}
+            </ScrollView>
 
-          <TextInput
-            placeholder="Your comment"
-            value={comment}
-            onChangeText={(text) => setComment(text)}
-            mode="outlined"
-            style={{
-              marginVertical:10
-            }}
-          />
+            <TextInput
+              placeholder="Your comment"
+              value={comment}
+              onChangeText={(text) => setComment(text)}
+              mode="outlined"
+              style={{
+                marginVertical: 10,
+              }}
+            />
           </SafeAreaView>
         </Comment>
       )}
